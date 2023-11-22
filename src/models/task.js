@@ -1,21 +1,25 @@
-import {Shema, model, models} from 'mongoose';
+import { Schema, model, models } from "mongoose";
 
-const taskShema = new Shema({
-    name: {
-        type: String,
-        required: [true, 'El nombre es obligatorio'],
-        unique: true,
-        trim: true,
+const TaskSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: [true, "The Task title is required "],
+      unique: true,
+      trim: true,
+      maxlength: [40, "title cannot be grater than 40 characters"],
     },
     description: {
-        type: String,
-        required: [true, 'La descripcion es obligatoria'],
-        trim: true,
-    }
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: [200, "title cannot be grater than 200 characters"],
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  }
+);
 
-}, {
-    timestamps: true
-})
-
-export default models.Task || model('Task', taskShema);
-
+export default models.Task || model("Task", TaskSchema);

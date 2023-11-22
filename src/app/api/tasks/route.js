@@ -1,17 +1,25 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/utils/dbConexion";
 import Task from "@/models/task";
+import { data } from "autoprefixer";
 
-export function GET() {
+export async function GET() {
     connectDB();
-    
 
-
-
-  return NextResponse.json({ message: "Obteniedo Tareas" });
+   const tasks = await Task.find({});
+    return NextResponse.json(tasks);
 }
 
-export function POST() {
-  return NextResponse.json({ message: "Creando Tarea" });
+export async function POST(request) {
+  try {
+    const data = await request.json();
+  const newTask = new Task(data);
+  const saveTasks = await newTask.save();
+  // console.log(saveTasks)
+  return NextResponse.json(saveTasks);
+    
+  } catch (error) {
+    return NextResponse.json(error.message,{status:400});
+  }
 }
 

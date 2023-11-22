@@ -1,20 +1,48 @@
 import { NextResponse } from "next/server";
+import { connectDB } from "@/utils/dbConexion";
+import Task from "@/models/task";
 
-export function GET(request, { params }) {
-    console.log(params)
-    return NextResponse.json({ 
-        message: `Obteniedo Tarea: ${params.id}` 
-    });
+export async function GET(request, { params }) {
+    try {
+        connectDB();
+        const tasksFound = await Task.findById(params.id)
+        if (!tasksFound) {
+            return NextResponse.json({
+                message: "Task not found",
+            },{
+                status: 404
+            });
+        }
+        return NextResponse.json(tasksFound);
+        
+    } catch (error) {
+        return NextResponse.json(error.message,{status:400});
+    }
 }
 
-export function DELETE(request, { params }) {
-    return NextResponse.json({ 
-        message: `Eliminando Tarea: ${params.id}` 
-    });
+export async function DELETE(request, { params }) {
+    try {
+        const tasksDelete = await Task.findByIdAndDelete(params.id);
+        if (!tasksDelete) {
+            return NextResponse.json({
+                message: "Task not found",
+            },{
+                status: 404
+            });
+        }
+        return NextResponse.json(tasksDelete);
+    } catch (error) {
+        return NextResponse.json(error.message,{status:400});
+    }
+
 }
 
-export function PUT(request, { params }) {
-    return NextResponse.json({ 
-        message: `Actualizando Tarea: ${params.id}` 
-    });
+export async function PUT(request, { params }) {
+    try {
+        const data = await request.json();
+        const tasksUpdate = await Task.findByIdAndUpdate(params.id, data, {new: true});
+        return NextResponse.json(tasksUpdate);
+    } catch (error) {
+        return NextResponse.json(error.message,{status:400});
+    }
 }
