@@ -1,5 +1,6 @@
-import { connectDB } from "@/utils/dbConexion"
-import Task from "@/models/task"
+import { connectDB } from '@/utils/dbConexion'
+import TaskCard from '@/components/TaskCard'
+import Task from '@/models/task'
 
 async function loadTasks() {
   connectDB()
@@ -9,14 +10,17 @@ async function loadTasks() {
 }
 
 async function HomePage() {
-  const tasks = loadTasks()
+  const tasks = await loadTasks()
   return (
-    <div>
-      {
-        JSON.stringify(tasks)
-      }
+    <div className="grid grid-cols-3 gap-2">
+      {tasks.map((task) => (
+        <TaskCard key={task._id} task={task} />
+      ))}
 
+      
     </div>
+
+    
   )
 }
 

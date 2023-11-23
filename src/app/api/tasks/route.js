@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server";
-import { connectDB } from "@/utils/dbConexion";
-import Task from "@/models/task";
-import { data } from "autoprefixer";
+import { NextResponse } from 'next/server';
+import { connectDB } from '@/utils/dbConexion'
+import Task from '@/models/task';
 
 export async function GET() {
     connectDB();
